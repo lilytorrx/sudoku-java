@@ -22,7 +22,7 @@ public class Space {
         this.actual = actual;
     }
 
-    public void clearSpace(Integer actual) {
+    public void clearSpace() {
         this.actual = null;
     }
 
