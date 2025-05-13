@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import model.Board;
+import model.Space;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -94,6 +95,18 @@ public class Main {
             return;
         }
         List<List<Space>> spaces = new ArrayList<>();
+        for(int i = 0; i < boardLimit; i++) {
+            spaces.add(new ArrayList<>());
+            for(int j = 0; j < boardLimit; j++) {
+                var positionsConfig = positions.get("%s,%s".formatted(i, j));
+                var expected = Integer.parseInt(positionsConfig.split(",")[0]);
+                var fixed = Boolean.parseBoolean(positionsConfig.split(",")[1]);
+                var currentSpace = new Space(expected, fixed);
+                spaces.get(i).add(currentSpace);
+            }
+        }
+        board = new Board(spaces);
+        System.out.println("O jogo está pronto para começar");
     }
 }
 
