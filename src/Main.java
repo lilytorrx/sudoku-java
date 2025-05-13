@@ -86,7 +86,21 @@ public class Main {
     }
 
     private static void inputNumber() {
-        
+        if(board == null) {
+            System.out.println("O jogo não foi iniciado!");
+            return;
+        }
+        System.out.println("Informe a coluna que deseja inserir o número: ");
+        var col = runUntilGetValidNumber(0, 8);
+        System.out.println("Informe a coluna que deseja inserir o número: ");
+        var row = runUntilGetValidNumber(0, 8);
+
+        System.out.printf("Informe o número que deseja inserir na posição %s,%s\n: ", col, row);
+        var value = runUntilGetValidNumber(1, 9);
+        if(!board.changeValue(col, row, value)) {
+            System.out.printf("A posição %s,%s tem um valor fixo!\n", col, row);
+            return;
+        }
     }
 
     private static void startGame(final Map<String, String> positions) {
@@ -107,6 +121,15 @@ public class Main {
         }
         board = new Board(spaces);
         System.out.println("O jogo está pronto para começar");
+    }
+
+    private static int runUntilGetValidNumber(final int min, final int max) {
+        var current = scanner.nextInt();
+        while(current < min || current > max) {
+            System.out.println("Número inválido! Informe um número entre %s e %s\n".formatted(min, max));
+            current = scanner.nextInt();
+        }
+        return current;
     }
 }
 
