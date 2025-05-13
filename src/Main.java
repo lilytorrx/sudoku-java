@@ -82,7 +82,19 @@ public class Main {
     }
 
     private static void removeNumber() {
+        if(board == null) {
+            System.out.println("O jogo não foi iniciado!");
+            return;
+        }
+        System.out.println("Informe a coluna que deseja inserir o número: ");
+        var col = runUntilGetValidNumber(0, 8);
+        System.out.println("Informe a coluna que deseja inserir o número: ");
+        var row = runUntilGetValidNumber(0, 8);
 
+        System.out.printf("Informe o número que deseja inserir na posição %s,%s\n: ", col, row);
+        if(!board.clearValue(col, row)) {
+            System.out.printf("A posição %s,%s tem um valor fixo!\n", col, row);
+        }
     }
 
     private static void inputNumber() {
