@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.Scanner;
 import model.Board;
 import model.Space;
+import util.BoardTemplate;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public class Main {
     private final static Scanner scanner = new Scanner(System.in);
@@ -15,12 +15,11 @@ public class Main {
     private final static int boardLimit = 9;
 
     public static void main(String[] args) throws Exception {
-        final var positions = Stream.of(args).collect(Collectors.
-        toMap(key -> key.split(";")[0], 
-        value -> value.split(";")[1]));
-    
+        final var positions = Stream.of(args).collect(Collectors.toMap(key -> key.split(";")[0],
+                value -> value.split(";")[1]));
+
         var option = -1;
-        while(true) {
+        while (true) {
             System.out.println("Selecione uma das opções: ");
             System.out.println("1. Iniciar um novo jogo");
             System.out.println("2. Colocar um novo número");
@@ -30,9 +29,9 @@ public class Main {
             System.out.println("6. Limpar jogo");
             System.out.println("7. Finalizar jogo");
             System.out.println("8. Exit");
-            
+
             option = scanner.nextInt();
-    
+
             switch (option) {
                 case 1:
                     startGame(positions);
@@ -40,7 +39,7 @@ public class Main {
                 case 2:
                     inputNumber();
                     break;
-                case 3: 
+                case 3:
                     removeNumber();
                     break;
                 case 4:
@@ -61,69 +60,19 @@ public class Main {
                 default:
                     System.out.println("Opção inválida! Selecione uma opção válida.");
                     break;
-                }
             }
-        }
-
-    private static void finishGame() {
-
-    }
-
-    private static void clearGame() {
-
-    }
-
-    private static void checkGameStatus() {
-
-    }
-
-    private static void showCurrentGame() {
-
-    }
-
-    private static void removeNumber() {
-        if(board == null) {
-            System.out.println("O jogo não foi iniciado!");
-            return;
-        }
-        System.out.println("Informe a coluna que deseja inserir o número: ");
-        var col = runUntilGetValidNumber(0, 8);
-        System.out.println("Informe a coluna que deseja inserir o número: ");
-        var row = runUntilGetValidNumber(0, 8);
-
-        System.out.printf("Informe o número que deseja inserir na posição %s,%s\n: ", col, row);
-        if(!board.clearValue(col, row)) {
-            System.out.printf("A posição %s,%s tem um valor fixo!\n", col, row);
-        }
-    }
-
-    private static void inputNumber() {
-        if(board == null) {
-            System.out.println("O jogo não foi iniciado!");
-            return;
-        }
-        System.out.println("Informe a coluna que deseja inserir o número: ");
-        var col = runUntilGetValidNumber(0, 8);
-        System.out.println("Informe a coluna que deseja inserir o número: ");
-        var row = runUntilGetValidNumber(0, 8);
-
-        System.out.printf("Informe o número que deseja inserir na posição %s,%s\n: ", col, row);
-        var value = runUntilGetValidNumber(1, 9);
-        if(!board.changeValue(col, row, value)) {
-            System.out.printf("A posição %s,%s tem um valor fixo!\n", col, row);
-            return;
         }
     }
 
     private static void startGame(final Map<String, String> positions) {
-        if(board != null) {
+        if (board != null) {
             System.out.println("O jogo já foi iniciado!");
             return;
         }
         List<List<Space>> spaces = new ArrayList<>();
-        for(int i = 0; i < boardLimit; i++) {
+        for (int i = 0; i < boardLimit; i++) {
             spaces.add(new ArrayList<>());
-            for(int j = 0; j < boardLimit; j++) {
+            for (int j = 0; j < boardLimit; j++) {
                 var positionsConfig = positions.get("%s,%s".formatted(i, j));
                 var expected = Integer.parseInt(positionsConfig.split(",")[0]);
                 var fixed = Boolean.parseBoolean(positionsConfig.split(",")[1]);
@@ -137,12 +86,97 @@ public class Main {
 
     private static int runUntilGetValidNumber(final int min, final int max) {
         var current = scanner.nextInt();
-        while(current < min || current > max) {
+        while (current < min || current > max) {
             System.out.println("Número inválido! Informe um número entre %s e %s\n".formatted(min, max));
             current = scanner.nextInt();
         }
         return current;
     }
+
+    private static void clearGame() {
+        if (board == null) {
+            System.out.println("O jogo não foi iniciado!");
+            return;
+        }
+    }
+
+    private static void checkGameStatus() {
+        if (board == null) {
+            System.out.println("O jogo não foi iniciado!");
+            return;
+        }
+    }
+
+    private static void showCurrentGame() {
+        if (board == null) {
+            System.out.println("O jogo não foi iniciado!");
+            return;
+        }
+        var args = new Object[81];
+        var argPos = 0;
+        for (int i = 0; i < boardLimit; i++) {
+            for (var col : board.getSpaces()) {
+                args[argPos++] = " " + (col.get(1).getActual() == null ? " " : col.get(i).getActual());
+            }
+        }
+        System.out.println("Seu jogo se encontra da seguinte forma: ");
+        System.out.println(BoardTemplate.BOARD_TEMPLATE.formatted(args));
+    }
+
+    private static void removeNumber() {
+        if (board == null) {
+            System.out.println("O jogo não foi iniciado!");
+            return;
+        }
+        System.out.println("Informe a coluna que deseja inserir o número: ");
+        var col = runUntilGetValidNumber(0, 8);
+        System.out.println("Informe a coluna que deseja inserir o número: ");
+        var row = runUntilGetValidNumber(0, 8);
+
+        System.out.printf("Informe o número que deseja inserir na posição %s,%s\n: ", col, row);
+        if (!board.clearValue(col, row)) {
+            System.out.printf("A posição %s,%s tem um valor fixo!\n", col, row);
+        }
+    }
+
+    private static void inputNumber() {
+        if (board == null) {
+            System.out.println("O jogo não foi iniciado!");
+            return;
+        }
+        System.out.println("Informe a coluna que deseja inserir o número: ");
+        var col = runUntilGetValidNumber(0, 8);
+        System.out.println("Informe a coluna que deseja inserir o número: ");
+        var row = runUntilGetValidNumber(0, 8);
+
+        System.out.printf("Informe o número que deseja inserir na posição %s,%s\n: ", col, row);
+        var value = runUntilGetValidNumber(1, 9);
+        if (!board.changeValue(col, row, value)) {
+            System.out.printf("A posição %s,%s tem um valor fixo!\n", col, row);
+            return;
+        }
+    }
+
+    private static void finishGame() {
+        if (board == null) {
+            System.out.println("O jogo não foi iniciado!");
+            return;
+        }
+    }
+
 }
 
-// 0,0;4,false 1,0;7,false 2,0;9,true 3,0;5,false 4,0;8,true 5,0;6,true 6,0;2,true 7,0;3,false 8,0;1,false 0,1;1,false 1,1;3,true 2,1;5,false 3,1;4,false 4,1;7,true 5,1;2,false 6,1;8,false 7,1;9,true 8,1;6,true 0,2;2,false 1,2;6,true 2,2;8,false 3,2;9,false 4,2;1,true 5,2;3,false 6,2;7,false 7,2;4,false 8,2;5,true 0,3;5,true 1,3;1,false 2,3;3,true 3,3;7,false 4,3;6,false 5,3;4,false 6,3;9,false 7,3;8,true 8,3;2,false 0,4;8,false 1,4;9,true 2,4;7,false 3,4;1,true 4,4;2,true 5,4;5,true 6,4;3,false 7,4;6,true 8,4;4,false 0,5;6,false 1,5;4,true 2,5;2,false 3,5;3,false 4,5;9,false 5,5;8,false 6,5;1,true 7,5;5,false 8,5;7,true 0,6;7,true 1,6;5,false 2,6;4,false 3,6;2,false 4,6;3,true 5,6;9,false 6,6;6,false 7,6;1,true 8,6;8,false 0,7;9,true 1,7;8,true 2,7;1,false 3,7;6,false 4,7;4,true 5,7;7,false 6,7;5,false 7,7;2,true 8,7;3,false 0,8;3,false 1,8;2,false 2,8;6,true 3,8;8,true 4,8;5,true 5,8;1,false 6,8;4,true 7,8;7,false 8,8;9,false
+// 0,0;4,false 1,0;7,false 2,0;9,true 3,0;5,false 4,0;8,true 5,0;6,true
+// 6,0;2,true 7,0;3,false 8,0;1,false 0,1;1,false 1,1;3,true 2,1;5,false
+// 3,1;4,false 4,1;7,true 5,1;2,false 6,1;8,false 7,1;9,true 8,1;6,true
+// 0,2;2,false 1,2;6,true 2,2;8,false 3,2;9,false 4,2;1,true 5,2;3,false
+// 6,2;7,false 7,2;4,false 8,2;5,true 0,3;5,true 1,3;1,false 2,3;3,true
+// 3,3;7,false 4,3;6,false 5,3;4,false 6,3;9,false 7,3;8,true 8,3;2,false
+// 0,4;8,false 1,4;9,true 2,4;7,false 3,4;1,true 4,4;2,true 5,4;5,true
+// 6,4;3,false 7,4;6,true 8,4;4,false 0,5;6,false 1,5;4,true 2,5;2,false
+// 3,5;3,false 4,5;9,false 5,5;8,false 6,5;1,true 7,5;5,false 8,5;7,true
+// 0,6;7,true 1,6;5,false 2,6;4,false 3,6;2,false 4,6;3,true 5,6;9,false
+// 6,6;6,false 7,6;1,true 8,6;8,false 0,7;9,true 1,7;8,true 2,7;1,false
+// 3,7;6,false 4,7;4,true 5,7;7,false 6,7;5,false 7,7;2,true 8,7;3,false
+// 0,8;3,false 1,8;2,false 2,8;6,true 3,8;8,true 4,8;5,true 5,8;1,false
+// 6,8;4,true 7,8;7,false 8,8;9,false
