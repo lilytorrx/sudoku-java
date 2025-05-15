@@ -1,4 +1,4 @@
-package ui.custom.painel;
+package ui.custom.panel;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;
