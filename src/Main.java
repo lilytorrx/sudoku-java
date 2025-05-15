@@ -105,6 +105,13 @@ public class Main {
             System.out.println("O jogo não foi iniciado!");
             return;
         }
+
+        System.out.printf("O jogo atualmente se encontra no status %s\n", board.getStatus().getLabel());
+        if(board.hasErrors()) {
+            System.out.println("O jogo contém erros!");
+        } else {
+            System.out.println("O jogo não contém erros!");
+        }
     }
 
     private static void showCurrentGame() {
