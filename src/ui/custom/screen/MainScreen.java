@@ -13,7 +13,6 @@ public class MainScreen {
     private final static Dimension dimension = new Dimension(600,600);
     private final BoardService boardService;
 
-    private JButton FinishGameButton;
     private JButton checkGameStatusButton;
     private JButton resetButton;
 
@@ -34,6 +33,7 @@ public class MainScreen {
     }
 
     private void addFinishGame(JPanel mainPanel) {
+        JButton FinishGameButton = null;
         mainPanel.add(FinishGameButton);
     }
 
