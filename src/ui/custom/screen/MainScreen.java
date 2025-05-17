@@ -59,7 +59,7 @@ public class MainScreen {
                 case INCOMPLETE -> "O jogo está incompleto!";
                 case COMPLETE -> "O jogo está completo!";
             };
-            message += hasErros ? " e contém erros!" : " e não contém erros.";
+            message += hasErros ? " e contém erros!" : "";
             JOptionPane.showMessageDialog(null, message);
         });
 

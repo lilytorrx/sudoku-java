@@ -11,7 +11,7 @@ import model.Space;
 public class BoardService {
     private final static int BOARD_LIMIT = 9;
 
-    private final Board board;
+    private static Board board = null;
 
     public BoardService(final Map<String, String> gameConfig) {
         board = new Board(initBoard(gameConfig));
