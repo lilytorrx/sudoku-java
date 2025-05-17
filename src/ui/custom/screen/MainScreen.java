@@ -1,14 +1,18 @@
 package ui.custom.screen;
 
+import model.Space;
 import service.BoardService;
 import ui.custom.button.CheckGameStatusButton;
 import ui.custom.button.FinishGameButton;
 import ui.custom.button.ResetButton;
 import ui.custom.frame.MainFrame;
+import ui.custom.input.NumberText;
 import ui.custom.panel.MainPanel;
+import ui.custom.panel.SudokuSector;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class MainScreen {
@@ -23,10 +27,22 @@ public class MainScreen {
         this.boardService = new BoardService(gameConfig);
     }
 
+    private JPanel generateSection(final List<Space> spaces){
+        List<NumberText> fields = new ArrayList<>(spaces.stream().map(NumberText::new).toList());
+        fields.forEach(t -> notifierService.subscribe(CLEAR_SPACE, t));
+        return new SudokuSector(fields);
+    }
+
     public void buildMainScreen() {
         JPanel mainPanel = new MainPanel(dimension);
         JFrame mainFrame = new MainFrame(dimension, mainPanel);
-
+        for(int r = 0; r < 9; r += 3) {
+            var endRow = r + 2;
+            for(int c = 0; c < 9; c += 3) {
+                var endCol = c + 2;
+                mainPanel.add();
+            }
+        }
         addResetButton(mainPanel);
         addCheckGameStatus(mainPanel);
         addFinishGame(mainPanel);
