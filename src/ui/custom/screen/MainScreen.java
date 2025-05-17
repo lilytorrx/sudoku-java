@@ -1,6 +1,8 @@
 package ui.custom.screen;
 
 import service.BoardService;
+import ui.custom.button.CheckGameStatusButton;
+import ui.custom.button.FinishGameButton;
 import ui.custom.button.ResetButton;
 import ui.custom.frame.MainFrame;
 import ui.custom.panel.MainPanel;
@@ -15,6 +17,7 @@ public class MainScreen {
 
     private JButton checkGameStatusButton;
     private JButton resetButton;
+    private JButton finishGameButton;
 
     public MainScreen(final Map<String,String> gameConfig) {
         this.boardService = new BoardService(gameConfig);
@@ -33,16 +36,32 @@ public class MainScreen {
     }
 
     private void addFinishGame(JPanel mainPanel) {
-        JButton FinishGameButton = null;
-        mainPanel.add(FinishGameButton);
+        finishGameButton = new FinishGameButton(e -> {
+            if(boardService.gameIsFinished()) {
+                JOptionPane.showMessageDialog(null, "Parabéns! O jogo está completo!");
+            }
+        });
+        mainPanel.add(finishGameButton);
     }
 
     private void addCheckGameStatus(JPanel mainPanel) {
+        checkGameStatusButton = new CheckGameStatusButton(e-> {
+            var hasErros = BoardService.hasErrors();
+            var gameStatus = BoardService.getStatus();
+            var message = switch(gameStatus) {
+                case NON_STARTED -> "O jogo não foi iniciado!";
+                case INCOMPLETE -> "O jogo está incompleto!";
+                case COMPLETE -> "O jogo está completo!";
+            };
+            message += hasErros ? " e contém erros!" : " e não contém erros.";
+            JOptionPane.showMessageDialog(null, message);
+        });
+
         mainPanel.add(checkGameStatusButton);
     }
 
     private void addResetButton(JPanel mainPanel) {
-        JButton resetButton = new ResetButton(e->{
+        resetButton = new ResetButton(e->{
             var dialogResult = JOptionPane.showConfirmDialog(
                     null,
                     "Deseja reiniciar o jogo? Você vai perder TODO o seu progesso!",

@@ -25,11 +25,11 @@ public class BoardService {
         board.reset();
     }
 
-    public boolean hasErrors() {
+    public static boolean hasErrors() {
         return board.hasErrors();
     }
 
-    public GameStatusEnum getStatus() {
+    public static GameStatusEnum getStatus() {
         return board.getStatus();
     }
 
